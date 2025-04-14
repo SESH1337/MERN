@@ -17,13 +17,13 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    let response = await verifyUser(user)
-    navigate('/home')
-
-    if (response) {
-      navigate('/home')
-    } else {
-      alert('Login failed')
+    try {
+      let response = await verifyUser(user)
+      if (response) {
+        navigate('/home')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
     }
   }
 

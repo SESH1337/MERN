@@ -9,8 +9,8 @@ const PORT = 3000
 
 app.use(cors())
 app.use(express.json())
-app.use(users)
 app.use(posts)
+app.use(users)
 
 app.listen(PORT, async () => {
   await connect.connectToServer()

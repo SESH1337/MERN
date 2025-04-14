@@ -65,15 +65,18 @@ userRoutes.route('/users').post(async (request, response) => {
 userRoutes.route('/users/:id').put(async (request, response) => {
   let db = database.getDb()
 
+  let hash = await bcrypt.hash(request.body.password, SALT_ROUNDS) // ✅ პაროლის დაჰეშვა
+
   let mongoObject = {
     $set: {
       name: request.body.name,
       email: request.body.email,
-      password: request.body.password,
+      password: hash, // ✅ შევინახოთ დაჰეშილი პაროლი
       joinDate: request.body.joinDate,
       posts: request.body.posts,
     },
   }
+
   let data = await db
     .collection('users')
     .updateOne({ _id: new ObjectId(request.params.id) }, mongoObject)
@@ -92,7 +95,7 @@ userRoutes.route('/users/:id').delete(async (request, response) => {
 })
 
 // #6 - Login // user-ის შესვლა landing-ზე
-userRoutes.route('/login').post(async (request, response) => {
+userRoutes.route('/users/login').post(async (request, response) => {
   let db = database.getDb()
 
   const user = await db
